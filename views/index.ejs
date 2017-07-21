@@ -1,0 +1,31 @@
+<% include ../views/layouts/header %>
+<script src="/angular/gameShowController.js"></script>
+<h1></h1>
+    <h2>Games Choice</h2>
+
+    <div ng-controller="gameShowController as gameShow">
+        <button ng-click="gameShow.reloadGame()">Reload</button>
+
+        <span ng-bind="message"></span>
+        <p>{{gameShow.test}}</p>
+        <div ng-controller="addGameController as addGame">
+        <button ng-click="addGame.addGameClick = true" ng-hide="addGame.addGameClick">Add Game</button>
+        <div ng-show="addGame.addGameClick">
+            <form>
+                Game Name: <input type="text" class="form-control" ng-model="gameInfo.name">
+                Game Image: <input type="text" class="form-control" ng-model="gameInfo.image">
+                Author Name: <input type="text" class="form-control" ng-model="gameInfo.author">
+            </form>
+            
+        </div>
+        <button ng-click="addGame.addGameClick = false; addGame.insertGame()" ng-show="addGame.addGameClick">Update Game</button>
+        </div>
+        <div></div>
+    	<div class="col-sm-3" ng-repeat="game in gamesData">
+	    	{{game._id}}<br>
+	    	{{game.name}}<br>
+            {{game.image}}<br>
+	    	{{game.author}}<br>
+	    </div>
+    </div>
+<% include ../views/layouts/footer %>
