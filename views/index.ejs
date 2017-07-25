@@ -8,24 +8,64 @@
 
         <span ng-bind="message"></span>
         <p>{{gameShow.test}}</p>
-        <div ng-controller="addGameController as addGame">
-        <button ng-click="addGame.addGameClick = true" ng-hide="addGame.addGameClick">Add Game</button>
-        <div ng-show="addGame.addGameClick">
-            <form>
-                Game Name: <input type="text" class="form-control" ng-model="gameInfo.name">
-                Game Image: <input type="text" class="form-control" ng-model="gameInfo.image">
-                Author Name: <input type="text" class="form-control" ng-model="gameInfo.author">
+        <!-- <div ng-controller="addGameController as addGame"> -->
+        <button ng-click="addGameClick = true" ng-hide="addGameClick">Add Game</button>
+        <!-- Add Game -->
+        <div ng-show="addGameClick">
+            <form name="myForm" ng-submit="gameShow.insertGame()">
+                <br>Game Name: <input type="text" class="form-control" name="name" ng-model="gameInfo.name" required>
+                <span ng-show="myForm.name.$touched && myForm.name.$invalid">The name is required.</span>
+                <br>Game Image: <input type="text" class="form-control" name="image" ng-model="gameInfo.image" required>
+                <span ng-show="myForm.image.$touched && myForm.image.$invalid">The name is required.</span>
+                <br>Author Name: <input type="text" class="form-control" name="author" ng-model="gameInfo.author" required>
+                <span ng-show="myForm.author.$touched && myForm.author.$invalid">The name is required.</span>
+                <input type="submit" ng-show="addGameClick" value="Update Game">
             </form>
+            <button ng-click="addGameClick = false">Cancel</button>
             
         </div>
-        <button ng-click="addGame.addGameClick = false; addGame.insertGame()" ng-show="addGame.addGameClick">Update Game</button>
+        <!-- </div> -->
+        <div>
+            Search: <input type="text" name="searchGame" ng-model="searchGame">
         </div>
-        <div></div>
-    	<div class="col-sm-3" ng-repeat="game in gamesData">
+    	<div class="col-sm-3" ng-repeat="game in gamesData | filter:searchGame">
 	    	{{game._id}}<br>
 	    	{{game.name}}<br>
             {{game.image}}<br>
 	    	{{game.author}}<br>
+            <input type="button" name="deleteGame" value="X" ng-click="gameShow.deleteGame(game._id)"><br>
+            
+            <!-- Edit Game -->
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editGame" ng-click="gameShow.gameEditModalValue(game)">Edit</button>
+            <!-- <span ng-show="edit">{{gameID}}</span> -->
+                
+
+
 	    </div>
+        <!-- Edit Game Modal -->
+                <div id="editGame" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Game {{editGame._id}}</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form name="updateForm" ng-submit="gameShow.updateGame(editGame._id)">
+                            <br>Game Name: <input type="text" class="form-control" name="name" ng-model="editGame.name" required>
+                            <span ng-show="updateForm.name.$touched && updateForm.name.$invalid">The name is required.</span>
+                            <br>Game Image: <input type="text" class="form-control" name="image" ng-model="editGame.image" required>
+                            <span ng-show="updateForm.image.$touched && updateForm.image.$invalid">The name is required.</span>
+                            <br>Author Name: <input type="text" class="form-control" name="author" ng-model="editGame.author" required>
+                            <span ng-show="updateForm.author.$touched && updateForm.author.$invalid">The name is required.</span>
+                            <input type="submit" value="Update Game" >
+                        </form>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
     </div>
 <% include ../views/layouts/footer %>
